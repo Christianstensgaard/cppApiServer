@@ -1,0 +1,3 @@
+/mnt/c/git/cppApiServer/build/CMakeFiles/test.dir
+/mnt/c/git/cppApiServer/build/CMakeFiles/edit_cache.dir
+/mnt/c/git/cppApiServer/build/CMakeFiles/rebuild_cache.dir

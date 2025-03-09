@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/test.dir/sessionManager.cpp.o CMakeFiles/test.dir/mock_dataModel.cpp.o CMakeFiles/test.dir/rbac.cpp.o CMakeFiles/test.dir/main.cpp.o CMakeFiles/test.dir/restServer.cpp.o CMakeFiles/test.dir/routeConfig.cpp.o -o test  /usr/lib/x86_64-linux-gnu/libboost_system.so.1.74.0 /usr/lib/x86_64-linux-gnu/libboost_filesystem.so.1.74.0 

@@ -1,0 +1,226 @@
+openapi: 3.1.0
+info:
+  title: "DoogieDoo"
+  description: "Way too much work here tbf"
+  version: "1.0.0"
+paths:
+  /articles:
+    get:
+      summary: "Retrieve a list of articles"
+      description: "This endpoint returns a list of articles, accessible if the user has 'read' permission on articles."
+      parameters:
+        - in: cookie
+          name: SessionId
+          required: true
+          schema:
+            type: string
+            description: "Session ID cookie"
+      responses:
+        200:
+          description: "A list of articles"
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    article_id:
+                      type: integer
+                    title:
+                      type: string
+                    content:
+                      type: string
+              example:
+                - article_id: 1
+                  title: "Article 1"
+                  content: "Content of article 1"
+        403:
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Forbidden"
+  
+  /create_article:
+    post:
+      summary: "Create a new article"
+      description: "This endpoint allows users with 'create' permission to create a new article."
+      parameters:
+        - in: cookie
+          name: SessionId
+          required: true
+          schema:
+            type: string
+            description: "Session ID cookie"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                content:
+                  type: string
+              example:
+                title: "New Article"
+                content: "This is a new article."
+      responses:
+        200:
+          description: "Article created successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: "Article created"
+        403:
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Forbidden"
+  
+  /edit_article:
+    put:
+      summary: "Edit an existing article"
+      description: "This endpoint allows users with 'edit' permission to edit an article."
+      parameters:
+        - in: cookie
+          name: SessionId
+          required: true
+          schema:
+            type: string
+            description: "Session ID cookie"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                article_id:
+                  type: integer
+                title:
+                  type: string
+                content:
+                  type: string
+              example:
+                article_id: 1
+                title: "Updated Article"
+                content: "This is an updated article."
+      responses:
+        200:
+          description: "Article edited successfully"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                example:
+                  message: "Article edited"
+        403:
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Forbidden"
+
+  /login:
+    post:
+      summary: "User Login"
+      description: "This endpoint allows users to log in using their username and password, and receive a session ID if successful."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+              example:
+                username: "editor"
+                password: "hashed"
+      responses:
+        200:
+          description: "Login successful"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  session_id:
+                    type: string
+                example:
+                  message: "Login successful"
+                  session_id: "abc123xyz"
+        403:
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Invalid username or password"
+
+  /sessions:
+    get:
+      summary: "Retrieve all active sessions"
+      description: "This endpoint returns a list of all active sessions for debugging or monitoring purposes."
+      responses:
+        200:
+          description: "A list of active sessions"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  active_sessions:
+                    type: array
+                    items:
+                      type: string
+                example:
+                  active_sessions:
+                    - "session-abc123xyz"
+                    - "session-def456uvw"
+        403:
+          description: "Forbidden"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                example:
+                  error: "Forbidden"
