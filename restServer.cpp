@@ -6,25 +6,20 @@ namespace TCP {
       pRougeConfig = new RouteConfig();
       pServerThread = new std::thread(&REST_Api::startServer, this);
   }
-
   REST_Api::~REST_Api() {
-      delete pRougeConfig;
-      delete pServerThread;
+    delete pRougeConfig;
+    delete pServerThread;
   }
-
   RouteConfig& REST_Api::config() {
-      return *pRougeConfig;
+    return *pRougeConfig;
   }
-
   bool REST_Api::openConnection() {
-      return true;
+    return true;
   }
-
   bool REST_Api::closeConnection() {
-      ioContext.stop();
-      return true;
+    ioContext.stop();
+    return true;
   }
-
   std::string extractRouteFromRequest(const std::string& request) {
       size_t pos = request.find(" ");
       if (pos == std::string::npos) return "";
@@ -34,7 +29,6 @@ namespace TCP {
 
       return request.substr(pos + 1, endPos - pos - 1);
   }
-
   void REST_Api::startServer() {
       std::cout << "Server started on port 8080...\n";
       while (true) {
@@ -43,7 +37,6 @@ namespace TCP {
           std::thread(&REST_Api::handleClient, this, std::move(socket)).detach();
       }
   }
-
   std::string REST_Api::getContentType(const std::string& route) {
       if (route == "/swagger.json" || route == "/swagger.yaml") {
           return "application/json";
@@ -60,7 +53,6 @@ namespace TCP {
           return "text/html";
       }
   }
-
   void REST_Api::handleClient(boost::asio::ip::tcp::socket socket) {
       try {
           char buffer[1024];
@@ -75,9 +67,9 @@ namespace TCP {
           std::string request(buffer, length);
           std::string route = extractRouteFromRequest(request);
 
-          
           std::string responseBody = pRougeConfig->handleRequest(route, request);
 
+          //- This is moved to HttpManager
           std::string httpResponse =
             "HTTP/1.1 200 OK\r\n"
             "Content-Type: " + getContentType(route) + "\r\n"
@@ -90,7 +82,6 @@ namespace TCP {
           std::cerr << "Exception: " << e.what() << "\n";
       }
   }
-
   std::string extractFieldFromJson(const std::string& json, const std::string& field) {
     try {
 
@@ -114,7 +105,6 @@ namespace TCP {
         return "";
     }
   }
-
   void REST_Api::extractHeaderAndBody(const std::string& request, std::string& header, std::string& body) {
     size_t body_start_pos = request.find("\r\n\r\n");
 
@@ -129,5 +119,4 @@ namespace TCP {
     std::cout << "Header: \n" << header << "\n";
     std::cout << "Body: \n" << body << "\n";
   }
-
 }
